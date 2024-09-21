@@ -1,0 +1,2 @@
+Toulouse|22|109000|maison|9 avenue de la chocolatine
+Toulouse|23|76000|maison|2 rue du pain au chocolat
