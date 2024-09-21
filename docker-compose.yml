@@ -1,0 +1,32 @@
+version: "3.1"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: immo
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # - create db tables
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - seed db
+      - ./init/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
