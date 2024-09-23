@@ -12,7 +12,7 @@ services:
       # - create db tables
       - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
       # - seed db
-      - ./init/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+      - ./init/seeds.sql:/docker-entrypoint-initdb.d/seeds.sql
     ports:
       - "3307:3306"
 
