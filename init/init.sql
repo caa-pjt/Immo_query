@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `bien_immo`;
 
 -- Création des tables avec les contraintes de clés étrangères
 CREATE TABLE IF NOT EXISTS `bien_immo` (
-  `id_bien` INT PRIMARY KEY NOT NULL,
+  `id_bien` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `valeur_fonciere_actuelle` DECIMAL(10, 2),
   `no_voie` INT,
   `bis_ter_quater` VARCHAR(10) DEFAULT NULL,

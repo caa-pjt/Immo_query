@@ -1,16 +1,13 @@
 /*
-    1. Nombre de biens immobiliers vendus par mois, pour chaque mois de l’année.
+    1. Nombre de biens immobiliers vendus pour le 1re mois de l’année.
 
-    Nombre de lines attendues: 6 lignes
+    Nombre de lines attendues: 1 ligne
 
     | mois    |	nb_ventes |
     |---------|-----------|
-    | 2020-06 | 	| 243 |
-    | 2020-05 | 	| 187 |
-    | 2020-04 | 	| 76  |
-    | 2020-03 | 	| 118 |
-    | 2020-02 | 	| 184 |
     | 2020-01 | 	| 239 |
+        
+
 */
 SELECT DATE_FORMAT(date_vente, '%Y-%m') AS mois, COUNT(*) AS nb_ventes 
     FROM transactions
@@ -35,8 +32,7 @@ SELECT valeur_fonciere_actuelle, commune, ROUND(surface, 2) AS surface, type
       UNION 
 SELECT valeur_fonciere_actuelle, commune, ROUND(surface, 2) AS surface, type 
    FROM nouvelles_donnees
-   ORDER BY commune ASC
-   LIMIT 10;
+   ORDER BY commune ASC;
 
 /*
     3. Calcule le nombre de biens immobiliers vendus par commune, le prix moyen au m2 et la valeur foncière totale pour chaque commune.
@@ -45,7 +41,7 @@ SELECT valeur_fonciere_actuelle, commune, ROUND(surface, 2) AS surface, type
 
     | code_departement | commune        |  nombre_de_biens  | valeur_fonciere  | surface  | prix_m2  |
     |------------------|----------------|-------------------|------------------|----------|----------|
-    |       4 	       |SALLANCHES 	    |       3 	        |   415590 	       |  156.16  | 2661.31  |
+    |       74 	       |SALLANCHES 	    |       3 	        |   415590 	       |  156.16  | 2661.31  |
 	|       59 	       |LILLE 	        |       8 	        |   1069753 	   |  423.61  | 2525.33  |
 	|       31 	       |TOULOUSE        | 	    8 	        |   1366462 	   |  400.87  |	3408.74  |
 	|       13 	       |MARSEILLE 1ER 	|       2 	        |   299000 	       |  100.47  |	2976.01  |
@@ -71,13 +67,20 @@ GROUP BY
 
     Nombre de lines attendues: 0
 
-    Prix au metre carré > 1300 pour le département 31
-    | code_departement | commune              | prix_m2   |
-    |------------------|----------------------|-----------|
-    | 31               | LACROIX FALGARDE     | 2384.21   |
-    | 31               | RAMONVILLE ST AGNE   | 2892.07   |
-    | 31               | TOULOUSE             | 3562.56   |
-    | 31               | TOURNEFEUILLE        | 2142.16   |
+    +------------------+--------------------+---------+
+    | code_departement | commune            | prix_m2 |
+    +------------------+--------------------+---------+
+    |                  |                    |         |
+
+    A l'inversse, prix au metre carré > 1300 pour le département 31
+    +------------------+--------------------+---------+
+    | code_departement | commune            | prix_m2 |
+    +------------------+--------------------+---------+
+    | 31               | TOULOUSE           | 3562.56 |
+    | 31               | LACROIX FALGARDE   | 2384.21 |
+    | 31               | RAMONVILLE ST AGNE | 2892.07 |
+    | 31               | TOURNEFEUILLE      | 2142.16 |
+    +------------------+--------------------+---------+
 
 */
 SELECT 
@@ -122,16 +125,18 @@ ORDER BY
 
     Nombre de lines attendues: 467
 
-    | code_departement | commune                 | prix_m2 |
-    |------------------|-------------------------|---------|
-    | 47               | AGEN                    | 1135.27 |
-    | 62               | AVION                   | 1155.78 |
-    | 51               | AY-CHAMPAGNE            | 1092.80 |
-    | 33               | BEGLES                  | 1146.99 |
-    | 62               | BETHUNE                 |  904.23 |
-    | 26               | BOURG-DE-PEAGE          | 1094.95 |
-    | 18               | BOURGES                 | 1225.01 |
-    | 29               | BREST                   | 1272.44 |
+    +------------------+---------------------------+----------+
+    | code_departement | commune                   | prix_m2  |
+    +------------------+---------------------------+----------+
+    | 80               | ABBEVILLE                 |  1723.71 |
+    | 78               | ACHERES                   |  4226.71 |
+    | 47               | AGEN                      |  1135.27 |
+    | 13               | ALLAUCH                   |  2966.28 |
+    | 1                | AMBERIEU-EN-BUGEY         |  2419.98 |
+    | 80               | AMIENS                    |  2469.60 |
+    | 42               | ANDREZIEUX-BOUTHEON       |  2304.79 |
+    | 49               | ANGERS                    |  3342.51 |
+    etc...
 */
 SELECT 
    code_departement,
@@ -227,7 +232,7 @@ AND
     | ROANNE                    |      217.02 |
     | PARIS 17                  |      212.71 |
     | CHAMPIGNY-SUR-MARNE       |      209.87 |
-
+    etc...
 */
 SELECT 
     commune, 
@@ -277,7 +282,7 @@ GROUP BY
     | ANNECY                    |      43 |   63.29 |
     | ANTIBES                   |     726 |   60.00 |
     | ANTIBES                   |     725 |   66.01 |
-
+    etc...
 */
 SELECT 
     commune, 
