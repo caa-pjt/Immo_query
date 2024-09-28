@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `valeur_fonciere` DECIMAL(10, 2),
   `bien_immobilier` INT NOT NULL,
   PRIMARY KEY (`date_vente`, `bien_immobilier`),
-  FOREIGN KEY (`bien_immobilier`) REFERENCES `bien_immo` (`id_bien`),
+  FOREIGN KEY (`bien_immobilier`) REFERENCES `bien_immo` (`id_bien`) ON DELETE CASCADE,
   FOREIGN KEY (`date_vente`) REFERENCES `indice_insee` (`date`)
 );
 

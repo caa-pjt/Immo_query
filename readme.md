@@ -40,10 +40,10 @@ Toutes les commandes d'initialisation sont disponibles dans le fichier [docker-c
 1. Initialisez les conteneurs Docker avec la commande :
 
 ```bash
-   docker compose up --build
+   docker compose up --build -d
 ```
 
-2. Ouvrez phpMyAdmin pour voir la base de données immo depuis le navigateur, [http://localhost:8080/]
+2. Ouvrez phpMyAdmin pour voir la base de données immo depuis le navigateur, http://localhost:8080/
 
 Si vous souhaitez accéder à MySQL depuis le terminal, utilisez :
 
@@ -53,18 +53,27 @@ Si vous souhaitez accéder à MySQL depuis le terminal, utilisez :
    ...query voir fichier query.sql
 ```
 
-Le mot de passe pour le conteneur MySQL est `root` voir fichier `docker-compose.yml`.
+Les identifiants de connexion pour phpMyAdmin sont les suivants :
 
-3. Pour exécuter le fichier d'initialisation et de peuplement de la base de données, utilisez :
+- Utilisateur : `root`
+- Mot de passe : `root`
+
+
+> FACULTTATIF : 
+Pour exécuter le fichier d'initialisation et de peuplement de la base de données, utilisez :
 
 ```bash
-   docker exec -i mysql mysql -u root -proot immo < ./init/init.sql
+   docker exec -it mysql bash
+   mysql -u root -p
+   USE immo;
+   source /docker-entrypoint-initdb.d/init.sql;
+   source /docker-entrypoint-initdb.d/seeds.sql;
 ```
 
-4. Pour supprimer les conteneurs, utilisez :
+3. Pour supprimer les conteneurs, utilisez :
 
 ```bash
-   docker compose down
+   docker compose down --volumes
 ```
 
 ## Requêtes SQL

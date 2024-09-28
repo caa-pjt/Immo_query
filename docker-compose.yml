@@ -4,6 +4,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    platform: linux/x86_64
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: immo
@@ -18,6 +19,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    platform: linux/x86_64
     restart: always
     ports:
       - "8080:80"

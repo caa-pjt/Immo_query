@@ -1,7 +1,7 @@
 /*
     1. Nombre de biens immobiliers vendus pour le 1re mois de l’année.
 
-    Nombre de lines attendues: 1 ligne
+    Nombre de lignes attendues: 1 ligne
 
     | mois    |	nb_ventes |
     |---------|-----------|
@@ -37,14 +37,14 @@ SELECT valeur_fonciere_actuelle, commune, ROUND(surface, 2) AS surface, type
 /*
     3. Calcule le nombre de biens immobiliers vendus par commune, le prix moyen au m2 et la valeur foncière totale pour chaque commune.
 
-    Nombre de lines attendues: 467
+    Nombre de lignes attendues: 467
 
     | code_departement | commune        |  nombre_de_biens  | valeur_fonciere  | surface  | prix_m2  |
     |------------------|----------------|-------------------|------------------|----------|----------|
     |       74 	       |SALLANCHES 	    |       3 	        |   415590 	       |  156.16  | 2661.31  |
 	|       59 	       |LILLE 	        |       8 	        |   1069753 	   |  423.61  | 2525.33  |
 	|       31 	       |TOULOUSE        | 	    8 	        |   1366462 	   |  400.87  |	3408.74  |
-	|       13 	       |MARSEILLE 1ER 	|       2 	        |   299000 	       |  100.47  |	2976.01  |
+	|       13 	       |MARSEILLE 1ER 	|       2 	        |   299000 	       |  100.47  |	2976.01  |
 	|       13 	       |MARSEILLE 3EME 	|       1 	        |   48500 	       |  35.77   |	1355.88  |
      etc...
 */
@@ -59,13 +59,13 @@ FROM
     bien_immo
 GROUP BY
     code_departement,
-    commune
+    commune;
 
 /*
     4. Prix des logements au m2 < 1300 pour le département 31
-    Il y a 4 entrées dans la table bien_immo pour le département 31 mais aucune n’a un prix au m2 inférieur à 1300€.
+    Il y a 4 entrées dans la table bien_immo pour le département 31 mai aucune n’a un prix au m2 inférieur à 1300€.
 
-    Nombre de lines attendues: 0
+    Nombre de lignes attendues: 0
 
     +------------------+--------------------+---------+
     | code_departement | commune            | prix_m2 |
@@ -98,7 +98,7 @@ HAVING
 
 /*
     5. Prix des logements au m2 < 1300 pour chaque commune trié par ordre alphabétique de la commune
-    Nombre de lines attendues: 46
+    Nombre de lignes attendues: 46
 
     | code_departement | commune      | prix_m2 |
     |------------------|--------------|---------|
@@ -123,7 +123,7 @@ ORDER BY
 /*
     6. Prix moyen au m2 des logements groupé par commune et code département trié par ordre alphabétique de commune
 
-    Nombre de lines attendues: 467
+    Nombre de lignes attendues: 467
 
     +------------------+---------------------------+----------+
     | code_departement | commune                   | prix_m2  |
@@ -151,7 +151,7 @@ GROUP BY
 /*
    7. Valeur moyenne au m2 des logements
 
-    Nombre de lines attendues: 1
+    Nombre de lignes attendues: 1
 
     | prix_m2 |
     |---------|
@@ -165,7 +165,7 @@ FROM
 
 
 /*
-   8. Date de vente des logment ordonés par date de vente desc et limité à 10
+   8. Date de vente des logment ordonnés par date de vente desc et limité à 10
 
    * Sans la clause LIMIT 10, la requête retourne 130 lignes
 
@@ -190,7 +190,7 @@ LIMIT 10;
 
 
 /*
-    9. Prix des logments pour la rue: "ANNA POLITKOVSKAIA" à TOULOUSE
+    9. Prix des logements pour la rue: "ANNA POLITKOVSKAIA" à TOULOUSE
 
     +---------+-----------------+------------+----------+--------------------+
     | id_bien | valeur_fonciere | date_vente | commune  | voie               |
@@ -220,7 +220,7 @@ AND
 /*
     10. Rechercher les biens ayant la plus grande surface dans chaque commune
 
-    Nombre de lines attendues: 467
+    Nombre de lignes attendues: 467
 
     +---------------------------+-------------+
     | commune                   | surface_max |
@@ -247,7 +247,7 @@ ORDER BY
 /*
     11. Calculer la moyenne des surfaces par type de bien (appartement ou maison)
 
-    Nombre de lines attendues: 2
+    Nombre de lignes attendues: 2
 
     +-------------+-----------------+
     | type        | surface_moyenne |
@@ -268,7 +268,7 @@ GROUP BY
 /*
     12. Lister les biens immobiliers dont la surface est supérieure à la moyenne pour la commune
 
-    Nombre de lines attendues: 500
+    Nombre de lignes attendues: 500
 
     +---------------------------+---------+---------+
     | commune                   | id_bien | surface |
@@ -301,3 +301,48 @@ WHERE
     )
 ORDER BY 
     commune ASC;
+
+/*
+   13. Mis à jour de la table bien_immo pour les biens immobiliers de la commune OYONNAX
+       changer le type de bien Appartement en type Dépendance
+ */
+UPDATE bien_immo
+    JOIN (
+        SELECT id_bien FROM bien_immo
+        WHERE commune = 'OYONNAX' AND type = 'Appartement'
+    ) AS subquery
+    ON bien_immo.id_bien = subquery.id_bien
+SET bien_immo.type = 'Dépendance'
+WHERE bien_immo.id_bien = subquery.id_bien;
+
+/*
+    14. Afficher les biens immobiliers de la commune OYONNAX
+*/
+SELECT * FROM bien_immo WHERE commune = 'OYONNAX';
+
+/*
+    15. Afficher le nombre de biens immobiliers regroupés par type
+
+    Nombre de lignes attendues: 3 ligne
+
+    +---------------+---------+
+    | type          | nb_type |
+    +---------------+---------+
+    | Appartement   |    1025 |
+    | Maison        |      81 |
+    | Dépendance    |       1 |
+    +---------------+---------+
+
+*/
+SELECT DISTINCT bien_immo.type, COUNT(bien_immo.type) as nb_type FROM bien_immo
+                GROUP BY bien_immo.type;
+
+/*
+    16. Supprimer les biens immobiliers de la commune OYONNAX avec leurs transactions associées
+
+    DELETE FROM transactions WHERE bien_immobilier IN (
+        SELECT id_bien FROM bien_immo WHERE commune = 'OYONNAX'
+    );
+*/
+DELETE FROM bien_immo WHERE commune = 'OYONNAX';
+
